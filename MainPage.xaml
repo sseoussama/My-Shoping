@@ -1,0 +1,339 @@
+﻿<Page x:Name="Root"
+      x:Class="My_Shopping.AppShell"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:My_Shopping"
+      xmlns:controls="using:My_Shopping.Controls"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+      KeyDown="AppShell_KeyDown"
+      TabNavigation="Cycle"
+      mc:Ignorable="d">
+
+    <!-- Using a Page as the root for the app provides a design time experience as well as ensures that
+         when it runs on Mobile the app content won't appear under the system's StatusBar which is visible 
+         by default with a transparent background.  It will also take into account the presence of software
+         navigation buttons if they appear on a device.  An app can opt-out by switching to UseCoreWindow.
+    -->
+
+    <Page.Resources>
+        <DataTemplate x:Key="NavMenuItemTemplate" x:DataType="local:NavMenuItem">
+
+
+
+            <Grid>
+
+                <Grid.ColumnDefinitions >
+                    <ColumnDefinition Width="48" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <!-- Showing a ToolTip and the Label is redundant.  We put the ToolTip on the icon.
+                     It appears when the user hovers over the icon, but not the label which provides
+                     value when the SplitView is 'Compact' while reducing the likelihood of showing
+                     redundant information when the label is shown.-->
+
+                <FontIcon x:Name="Glyph" FontSize="16" Glyph="{x:Bind SymbolAsChar}" VerticalAlignment="Center" HorizontalAlignment="Center" ToolTipService.ToolTip="{x:Bind Label}"/>
+                <TextBlock x:Name="Text" Grid.Column="1" Text="{x:Bind Label}" />
+            </Grid>
+        </DataTemplate>
+
+
+
+
+    </Page.Resources>
+
+
+
+    <Grid >
+        <!-- Adaptive triggers -->
+
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Unselected">
+                    <Storyboard>
+                        <ColorAnimation Duration="0" Storyboard.TargetName="myback" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="Transparent"/>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="SelectedUnfocused">
+                    <Storyboard>
+                        <ColorAnimation Duration="0" Storyboard.TargetName="myback" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" To="Red"/>
+                    </Storyboard>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="720" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="RootSplitView.DisplayMode" Value="CompactOverlay"/>
+                        <Setter Target="RootSplitView.IsPaneOpen" Value="False"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="RootSplitView.DisplayMode" Value="Overlay"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <!-- Top-level navigation menu + app content -->
+        <SplitView x:Name="RootSplitView"
+                   DisplayMode="Inline"
+                   OpenPaneLength="256"
+                   IsTabStop="False">
+
+            <SplitView.Pane>
+                <!-- A custom ListView to display the items in the pane.  The automation Name is set in the ContainerContentChanging event. -->
+                <controls:NavMenuListView x:Name="NavMenuList"
+                                         
+                                         
+                                          TabIndex="3"
+                                          Margin="0,48,0,0"
+                                       
+                                          ContainerContentChanging="NavMenuItemContainerContentChanging"
+                                          ItemContainerStyle="{StaticResource NavMenuItemContainerStyle}"
+                                          ItemTemplate="{StaticResource NavMenuItemTemplate}"
+                                          ItemInvoked="NavMenuList_ItemInvoked">
+
+
+
+
+                </controls:NavMenuListView>
+            </SplitView.Pane>
+
+            <!-- OnNavigatingToPage we synchronize the selected item in the nav menu with the current page.
+                 OnNavigatedToPage we move keyboard focus to the first item on the page after it's loaded. -->
+            <Frame x:Name="frame"
+                   Navigating="OnNavigatingToPage"
+                   Navigated="OnNavigatedToPage" Margin="2,0,-2,0">
+
+                <Frame.ContentTransitions>
+                    <TransitionCollection>
+                        <NavigationThemeTransition>
+                            <EntranceNavigationTransitionInfo/>
+                        </NavigationThemeTransition>
+                    </TransitionCollection>
+                </Frame.ContentTransitions>
+
+
+
+
+            </Frame>
+        </SplitView>
+
+        <!-- Declared last to have it rendered above everything else, but it needs to be the first item in the tab sequence. -->
+        <ToggleButton x:Name="TogglePaneButton"
+                      TabIndex="1"
+                      Style="{StaticResource SplitViewTogglePaneButtonStyle}"
+                      IsChecked="{Binding IsPaneOpen, ElementName=RootSplitView, Mode=TwoWay}"
+                      Unchecked="TogglePaneButton_Checked"
+                      AutomationProperties.Name="Menu"
+                      ToolTipService.ToolTip="Menu" />
+
+
+
+
+        <CommandBar x:Name="CommandBar" Background="#F2F2F2" Margin="50,2,-15,0">
+            <CommandBar.Content>
+                <StackPanel x:Name="PanelBar" Background="#91C1E7" Margin="30,0" Height="59" Width="145"/>
+
+            </CommandBar.Content>
+
+
+
+
+
+
+            <AppBarButton   Label="Add" Icon="Add" Click="ButtonAddMessageDialog_Click" />
+            <AppBarButton Label="Delate" Click="ButtonDelateMessageDialog_Click" Icon="Delete" />
+        </CommandBar>
+
+        <ContentDialog x:Name="Dialog"
+                       
+                       Background="#F2F2F2"
+                       RequestedTheme="Light"
+                        VerticalAlignment="Top"
+                    
+                        PrimaryButtonText="OK"
+                        IsPrimaryButtonEnabled="{Binding IsChecked, ElementName=checkBoxAgree, Mode=OneWay}"
+                        SecondaryButtonText="Cancel" Margin="686,0,566,0" Width="668" Height="849" 
+   >
+            <StackPanel x:Name="panel" Orientation="Vertical">
+                <!--0-->
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <RadioButton x:Name="Ra1" Content="Category" Checked="Category_Checked"/>
+                    <RadioButton Grid.Column="1" x:Name="Ra2" Content="Product" Margin="50,0,0,0" Checked="Product_Checked"/>
+                    <RadioButton Grid.Column="2" x:Name="Ra3" Content="Shop" Margin="70,0,0,0" Checked="Shop_Checked" />
+                </Grid>
+                <!--1-->
+                <Grid x:Name="GridAddCat" Margin="0,5,0,0" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="16*"/>
+                        <RowDefinition Height="61*"  />
+                        <RowDefinition Height="14*" />
+                        <RowDefinition Height="0*"/>
+                        <RowDefinition Height="16*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition/>
+
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock TextWrapping="Wrap"  Text="Category Name" FontSize="16" />
+                    <ToggleSwitch x:Name="ToggleCat"  Grid.Row="1"  Header="Fovorite"  OffContent="NO" OnContent="Yes" Margin="51,67,0,0" VerticalAlignment="Top" Height="82" RenderTransformOrigin="0.617,0.533" Width="154"/>
+                    <TextBox Grid.Row="1" x:Name="NomCat" TextChanging="NomCat_TextChanging" Margin="0,0,70,168"  />
+                    <TextBlock Grid.Row="4" Margin="12,5,0,3" FontSize="18" TextWrapping="Wrap" x:Name="AddCatRemar"  Foreground="Red"/>
+                    <Button  Grid.Row="4"  Content="Add" Margin="196,0,0,0" Background="#91C1E7" ClickMode="Press" Click="AddCatButton_Click" Height="32" Width="48" />
+                    <StackPanel Grid.Column="1" Grid.Row="1" Margin="0,10,0,0" BorderBrush="Brown">
+                        <Image x:Name="CatImage" Height="190" Width="190" Source="Assets/Square150x150Logo.png" RenderTransformOrigin="-0.093,0.492" />
+                    </StackPanel>
+                    <Button  Grid.Column="1" Content="Choose Image" Margin="45,0,0,0" Background="#91C1E7" ClickMode="Press" Click="ChooseCatImage_Click" Height="32" Width="115" />
+
+                </Grid>
+                <!--2-->
+                <Grid x:Name="GridAddPro">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition/>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="59*" />
+                        <ColumnDefinition Width="107*"/>
+
+                    </Grid.ColumnDefinitions>
+                    <TextBlock TextWrapping="Wrap"  Text="Category" Margin="10,5,0,0" FontSize="16" />
+                    <ComboBox Margin="10,0,0,0" x:Name="ComboCatAddPro" Grid.Row="1" SelectionChanged="ComboCat_SelectionChanged" Loaded="ComboCat_Loaded" Width="150"   />
+                    <TextBlock Grid.Row="1" TextWrapping="Wrap" Margin="10,50,10,99"  Text="Product Name" FontSize="16" />
+                    <TextBox Grid.Row="1"   x:Name="NomPro" TextChanging="NomPro_TextChanging" Margin="10,78,10,99" RenderTransformOrigin="0.699,0.469" Width="150"  />
+                    <ToggleSwitch  x:Name="TogglePro"  Grid.Row="1" Header="Fovorite"  OffContent="NO" OnContent="Yes" Margin="36,0,0,10" VerticalAlignment="Bottom" Height="60" RenderTransformOrigin="0.617,0.533" Grid.ColumnSpan="2"/>
+                    <Button  Grid.Row="5" Grid.Column="1" Content="Add" Margin="5,0,0,0" Background="#91C1E7" ClickMode="Press" Click="AddProButton_Click" />
+                    <TextBlock Grid.Row="5" FontSize="18" TextWrapping="Wrap" x:Name="AddProRemar"  Foreground="Red" Margin="10,5,10,0"/>
+                    <Button   Grid.Column="2" Content="Choose Image" Margin="95,5,0,0" Background="#91C1E7" ClickMode="Press" Click="ChooseProImage_Click" />
+                    <StackPanel Grid.Column="1" Grid.Row="1" Margin="25,10,0,0" >
+                        <Image x:Name="ProImage" Height="190" Width="190" Source="Assets/Square150x150Logo.png" RenderTransformOrigin="-0.093,0.492" />
+                    </StackPanel>
+                </Grid>
+                <!--3-->
+                <Grid x:Name="GridAddShop">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+
+                    </Grid.ColumnDefinitions>
+                    <TextBlock TextWrapping="Wrap"  Text="Category" FontSize="16" />
+
+                    <TextBlock  TextWrapping="Wrap" Grid.Row="2" Margin="0,0,0,0" Text="Product" FontSize="16" Grid.ColumnSpan="2"/>
+                    <TextBlock  Grid.Row="4" TextWrapping="Wrap" Margin="0,0,0,0"  Text="Shop Name" FontSize="16" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="85" />
+                    <TextBlock Grid.Row="6" TextWrapping="Wrap" Text="Price" FontSize="16"/>
+                    <TextBox Grid.Row="7" Width="145"  TextChanging="Prix_TextChanging" x:Name="Prix" Margin="0,0,20,34"/>
+                    <ComboBox x:Name="ComboCatAddShop" SelectionChanged="ComboCat_SelectionChanged" Grid.Row="1" Loaded="ComboCat_Loaded" Width="145" />
+                    <ComboBox x:Name="ComboProAddShop" Grid.Row="3" Width="145" Margin="0,0,21,0" SelectionChanged="ComboPro_SelectionChanged" HorizontalAlignment="Stretch"/>
+                    <TextBox Grid.Row="5"  Width="145" x:Name="NomShop" TextChanging="NomShop_TextChanging" Margin="0,0,20,0"   />
+
+                    <TextBlock Grid.Row="8" Margin="0,0,0,10" TextWrapping="Wrap" FontSize="18" x:Name="AddShopRemar"  Foreground="Red"/>
+                    <ToggleSwitch  x:Name="ToggleShop" Grid.Column="1" Header="Fovorite"  OffContent="NO" OnContent="Yes" Margin="0,5.667,0,28.5" Grid.RowSpan="3" Grid.Row="3" Width="83" Grid.ColumnSpan="2"   />
+                    <Button Grid.Column="1"  Content="Add" Margin="45,5,0,0" Background="#91C1E7" ClickMode="Press" Click="AddShopButton_Click" Grid.Row="7" Grid.ColumnSpan="2" RenderTransformOrigin="0.229,2.531"/>
+                    <Button   Grid.Column="2" Content="Choose Image" Margin="20,0,0,0" Background="#91C1E7" ClickMode="Press" Click="ChooseShopImage_Click" />
+                    <StackPanel Grid.Column="2" Grid.Row="1" Margin="0,5,0,-18" Grid.RowSpan="6">
+                        <Image x:Name="ShopImage" Source="Assets/Square150x150Logo.png" Height="190" Width="190" Margin="-18,0,0,0" />
+                    </StackPanel>
+                </Grid>
+                <!--3-->
+                <Grid x:Name="GridRemoveCat">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock  TextWrapping="Wrap" Margin="30,0,0,0"  Text="Category" FontSize="16" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="85" />
+                    <ComboBox x:Name="ComboCatDelCat"  Grid.Row="1" SelectionChanged="ComboCat_SelectionChanged" Loaded="ComboCat_Loaded" Width="146" Grid.ColumnSpan="2" Margin="30,2,0,0"/>
+                    <Button Grid.Column="2" Content="Delate" Margin="45,0,0,0" Background="#91C1E7" ClickMode="Press" Click="DelateCatButton_Click"   Grid.Row="1" Grid.ColumnSpan="2"/>
+                    <TextBlock Grid.Row="2" TextWrapping="Wrap" x:Name="DelCatRemar"  Foreground="Red" Margin="30,0,0,0"/>
+                </Grid>
+                <!--4-->
+                <Grid x:Name="GridRemovePro">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock  TextWrapping="Wrap" Margin="0,0,0,0"  Text="Category" FontSize="16" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="85" />
+                    <ComboBox x:Name="ComboCatDelPro"  Grid.Row="1" Loaded="ComboCat_Loaded" Width="146" SelectionChanged="ComboCat_SelectionChanged" Grid.ColumnSpan="2" Margin="0,2,0,0"/>
+                    <TextBlock  TextWrapping="Wrap" Grid.Column="1" Margin="30,0,0,0"  Text="Product" FontSize="16" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="85" />
+                    <ComboBox x:Name="ComboProDelPro" Grid.Row="1" Grid.Column="1" SelectionChanged="ComboPro_SelectionChanged" Margin="30,2,124,0" HorizontalAlignment="Stretch" Grid.ColumnSpan="2"/>
+                    <Button Grid.Column="2" Content="Delate" Margin="55,0,0,0" Background="#91C1E7" ClickMode="Press" Click="DelateProButton_Click"   Grid.Row="1" Grid.ColumnSpan="2"/>
+                    <TextBlock Grid.Row="2" TextWrapping="Wrap" x:Name="DelProRemar"  Foreground="Red" Margin="0,5,0,0"/>
+                </Grid>
+                <!--4-->
+                <Grid x:Name="GridRemoveShop">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+
+
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock  TextWrapping="Wrap" Margin="30,0,0,0"  Text="Category" FontSize="16" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="85" />
+                    <ComboBox x:Name="ComboCatDelShop"  Grid.Row="1" Loaded="ComboCat_Loaded" Width="146" SelectionChanged="ComboCat_SelectionChanged" Grid.ColumnSpan="2" Margin="30,2,0,0"/>
+                    <TextBlock  TextWrapping="Wrap" Grid.Column="1" Margin="35,0,0,0"  Text="Product" FontSize="16" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="85" />
+                    <ComboBox x:Name="ComboProDelShop" Grid.Row="1" Grid.Column="1" Width="146" SelectionChanged="ComboPro_SelectionChanged" Margin="10,2,0,0" HorizontalAlignment="Stretch"/>
+                    <TextBlock  TextWrapping="Wrap" Grid.Row="2" Margin="30,0,0,0"  Text="Shop" FontSize="16" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="85" />
+                    <ComboBox x:Name="ComboShopDelShop" Grid.Row="3"  Width="146" SelectionChanged="ComboShop_SelectionChanged" Margin="30,0,73,0" HorizontalAlignment="Stretch"/>
+                    <Button Grid.Column="1" Content="Delate" Margin="35,0,0,0" Background="#91C1E7" ClickMode="Press" Click="DelateShopButton_Click"   Grid.Row="3" Grid.ColumnSpan="2" />
+                    <TextBlock Grid.Row="4" TextWrapping="Wrap" x:Name="DelShopRemar"  Foreground="Red" Margin="30,5,0,0"/>
+                </Grid>
+            </StackPanel>
+
+
+
+        </ContentDialog>
+
+
+
+    </Grid>
+
+</Page>

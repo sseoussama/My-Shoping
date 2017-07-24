@@ -1,0 +1,318 @@
+﻿<Page
+    x:Class="My_Shopping.Views.Favorite"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:My_Shopping.Views"
+    xmlns:UI="using:Microsoft.Advertising.WinRT.UI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+     xmlns:data="using:My_Shopping.Class"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
+        <UI:AdControl ApplicationId="9p8smnl49379"
+         AdUnitId="349158"
+         HorizontalAlignment="Left"
+         Height="75"
+         VerticalAlignment="Top"
+         Width="426" Margin="60,63,0,0"/>
+        <StackPanel HorizontalAlignment="Center" Height="50" Margin="-200,70,0,0" Background="#91C1E7" VerticalAlignment="Top" Width="60">
+            <TextBlock x:Name="Text" HorizontalAlignment="Left" Height="50" Margin="5,0,0,0" TextWrapping="Wrap" Text="My" Width="55" FontSize="36"/>
+        </StackPanel>
+        <TextBlock  HorizontalAlignment="Center" Height="70" Margin="100,63,0,0" TextWrapping="Wrap" Text="Favorite" VerticalAlignment="Top" Width="228" FontSize="48" Grid.Column="3"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <StackPanel HorizontalAlignment="Left" Height="45" Margin="30,155,0,0" Background="#91C1E7" VerticalAlignment="Top" Width="60" RenderTransformOrigin="0.833,0.2">
+                    <TextBlock HorizontalAlignment="Left" Height="45" Margin="5,0,0,0" TextWrapping="Wrap" Text="My" Width="55" FontSize="30"/>
+                </StackPanel>
+                <GridView x:Name="GridView1" Background="#F2F2F2" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollMode="Auto" ItemsSource="{x:Bind ListFavCat}" IsItemClickEnabled="True" ItemClick="GridView1_ItemClick" Height="165" Margin="30,215,25,0" VerticalAlignment="Top">
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="data:Categorie">
+                            <StackPanel RightTapped="gridView_RightTapped1" Margin="6">
+                                <Image Width="200" Height="100"  Source="{x:Bind Image}" Margin="6" />
+                                <TextBlock  Text="{x:Bind Nom}" FontSize="20" FontFamily="Verdana" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+
+                </GridView>
+
+                <TextBlock  HorizontalAlignment="Left" Height="55" Margin="100,152,0,0" TextWrapping="Wrap" Text="Category" VerticalAlignment="Top" Width="205" FontSize="35"/>
+
+                <StackPanel HorizontalAlignment="Left" Height="45" Margin="30,400,0,0" Background="#91C1E7" VerticalAlignment="Top" Width="60" RenderTransformOrigin="0.833,0.2">
+                    <TextBlock HorizontalAlignment="Left" Height="45" Margin="5,0,0,0" TextWrapping="Wrap" Text="My" Width="55" FontSize="30"/>
+                </StackPanel>
+                <TextBlock  HorizontalAlignment="Left" Height="50" Margin="103,398,0,0" TextWrapping="Wrap" Text="Product" VerticalAlignment="Top" Width="228" FontSize="35"/>
+
+                <GridView x:Name="GridView2" Background="#F2F2F2" ItemsSource="{x:Bind ListFavPr}" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollMode="Auto" IsItemClickEnabled="True" ItemClick="GridView2_ItemClick" Height="205" Margin="30,455,25,0" VerticalAlignment="Top">
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="data:Produit">
+                            <StackPanel RightTapped="gridView_RightTapped2" Margin="6">
+                                <Image Width="200" Height="100"  Source="{x:Bind Image}" Margin="6"  />
+                                <TextBlock  Text="{x:Bind Nom}" FontSize="20" FontFamily="Verdana" HorizontalAlignment="Center" />
+                                <TextBlock  Text="{x:Bind NomCat}" FontSize="20" FontFamily="Verdana" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+
+                            <ItemsWrapGrid MaximumRowsOrColumns="1"/>
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
+                </GridView>
+                <StackPanel HorizontalAlignment="Left" Height="45" Margin="30,672,0,0" Background="#91C1E7" VerticalAlignment="Top" Width="60" RenderTransformOrigin="0.833,0.2">
+                    <TextBlock HorizontalAlignment="Left" Height="45" Margin="5,0,0,0" TextWrapping="Wrap" Text="My" Width="55" FontSize="30"/>
+                </StackPanel>
+
+                <TextBlock  HorizontalAlignment="Left" Height="50" Margin="103,672,0,0" TextWrapping="Wrap" Text="Shop" VerticalAlignment="Top" Width="228" FontSize="35"/>
+                <GridView x:Name="GridView3" Background="#F2F2F2" ItemsSource="{x:Bind ListFavMag}" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollMode="Auto" IsItemClickEnabled="True" ItemClick="GridView3_ItemClick" Height="205" Margin="30,725,25,0" VerticalAlignment="Top">
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="data:Magasin">
+                            <StackPanel RightTapped="gridView_RightTapped3" Margin="6">
+                                <Image Width="200" Height="100"  Source="{x:Bind Image}" Margin="6"  />
+                                <TextBlock  Text="{x:Bind Nom}" FontSize="20" FontFamily="Verdana" HorizontalAlignment="Center" />
+                                <TextBlock  Text="{x:Bind NbProduitTostring}" FontSize="20" FontFamily="Verdana" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+
+                            <ItemsWrapGrid MaximumRowsOrColumns="1"/>
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
+                </GridView>
+            </Grid>
+        </ScrollViewer>
+        <ContentDialog x:Name="Dialog"
+                       
+                        Background="#F2F2F2"
+                       RequestedTheme="Light"
+                        VerticalAlignment="Top"
+                        
+                        PrimaryButtonText="OK"
+                        IsPrimaryButtonEnabled="{Binding IsChecked, ElementName=checkBoxAgree, Mode=OneWay}"
+                        SecondaryButtonText="Cancel" Grid.Column="3" Height="465" Width="469" Margin="366,0,381,0" RenderTransformOrigin="0.5,0.5" >
+            <ContentDialog.RenderTransform>
+                <CompositeTransform SkewY="-0.182" TranslateY="-0.747"/>
+            </ContentDialog.RenderTransform>
+
+            <StackPanel x:Name="panel" Orientation="Vertical">
+                <!-- 0-->
+                <Grid x:Name="GridRenamCat">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock TextWrapping="Wrap" Margin="0,10,0,0" Text=" New Category Name" FontSize="16" />
+                    <TextBox x:Name="NewNomCat" Grid.Row="1" TextChanging="NewNomCat_TextChanging" Margin="0,5,0,0"  />
+                    <Button Grid.Column="1" Grid.Row="1" Content="Rename" Margin="46,5,0,0" Background="#91C1E7" ClickMode="Press" Click="RenameCatButton_Click" RenderTransformOrigin="-0.054,0.596" />
+                    <TextBlock Grid.Row="2" FontSize="18" TextWrapping="Wrap" x:Name="RenamCatRemar"  Foreground="Red" Margin="0,5,0,0"/>
+                </Grid>
+                <Grid x:Name="GridAddPro" Margin="0,5,0,0" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="16*"/>
+                        <RowDefinition Height="61*"  />
+                        <RowDefinition Height="14*" />
+                        <RowDefinition Height="0*"/>
+                        <RowDefinition Height="16*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition/>
+
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock TextWrapping="Wrap"  Text="Product Name" FontSize="16" />
+                    <ToggleSwitch x:Name="TogglePro"  Grid.Row="1"  Header="Fovorite"  OffContent="NO" OnContent="Yes" Margin="50,77,0,0" VerticalAlignment="Top" Height="82" RenderTransformOrigin="0.617,0.533" Width="154"/>
+                    <TextBox Grid.Row="1" x:Name="NomPro" TextChanging="NomPro_TextChanging" Margin="0,0,70,166"  />
+                    <TextBlock Grid.Row="4" Margin="12,5,0,3" TextWrapping="Wrap" x:Name="AddProRemar" FontSize="18" Foreground="Red"/>
+                    <Button  Grid.Row="4"  Content="Add" Margin="200,0,0,0" Background="#91C1E7" ClickMode="Press" Click="AddProButton_Click" Height="32" Width="48" />
+                    <StackPanel Grid.Column="1" Grid.Row="1" Margin="0,10,0,0" BorderBrush="Brown">
+                        <Image x:Name="ProImage" Height="190" Width="190" Source="Assets/Square150x150Logo.png" RenderTransformOrigin="-0.093,0.492" />
+                    </StackPanel>
+                    <Button  Grid.Column="1" Content="Choose Image" Margin="33,0,0,0" Background="#91C1E7" ClickMode="Press" Click="ChooseProImage_Click" Height="32" Width="115" RenderTransformOrigin="0.774,0.538" />
+
+                </Grid>
+                <Grid x:Name="GridChangCatImg">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Button   Content="Choose Image" Margin="36,10,0,0" Background="#91C1E7" ClickMode="Press" Click="ChooseCatImg_Click" />
+                    <Button   Content="Change Image" Grid.Column="1" Grid.Row="1" Margin="40,0,0,0" Background="#91C1E7" ClickMode="Press" Click="ChangeCatImg_Click" />
+                    <StackPanel  Grid.Row="1" Margin="0,10,0,0" >
+                        <Image x:Name="CatImage" Height="190" Width="190" Source="Assets/Square150x150Logo.png" RenderTransformOrigin="-0.093,0.492" Margin="0,-5,10,0" />
+                    </StackPanel>
+                    <TextBlock Grid.Row="2" TextWrapping="Wrap" Margin="5,0,0,0" x:Name="ChangeCatImgRemar" FontSize="18" Foreground="Red"/>
+                </Grid>
+            </StackPanel>
+        </ContentDialog>
+        <ContentDialog x:Name="Dialog1"
+                       
+                       Background="#F2F2F2"
+                       RequestedTheme="Light"
+                        VerticalAlignment="Top"
+                        
+                        PrimaryButtonText="OK"
+                        IsPrimaryButtonEnabled="{Binding IsChecked, ElementName=checkBoxAgree, Mode=OneWay}"
+                        SecondaryButtonText="Cancel" Height="561" Width="809" Margin="340,0,131,0" >
+            <StackPanel x:Name="panel1" Orientation="Vertical">
+                <!-- 0-->
+                <Grid x:Name="GridRenamPro">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock TextWrapping="Wrap" Margin="0,10,0,0" Text=" New Product Name" FontSize="16" />
+                    <TextBox Grid.Row="1" x:Name="NewNomPro" TextChanging="NewNomPro_TextChanging"  Margin="1,0,0,0" />
+                    <Button Grid.Column="1" Grid.Row="1" Content="Rename" Margin="50,0,0,0" Background="#91C1E7" ClickMode="Press" Click="RenameProButton_Click" />
+                    <TextBlock Grid.Row="2" TextWrapping="Wrap" x:Name="RenamProRemar"  Foreground="Red"/>
+                </Grid>
+                <!-- 1-->
+                <Grid x:Name="GridAddShop">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+
+
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock TextWrapping="Wrap" Text="Shop Name" FontSize="16" />
+
+                    <TextBox Grid.Row="1"  x:Name="NomShop" TextChanging="NomShop_TextChanging" Margin="0,0,35,29" RenderTransformOrigin="0.503,0.088"  />
+                    <TextBlock Grid.Row="2" TextWrapping="Wrap" Margin="0,0,0,0"  Text="Price" FontSize="16" />
+                    <TextBox Grid.Row="3"  x:Name="Prix" TextChanging="Prix_TextChanging" Margin="0,1,35,10" RenderTransformOrigin="-0.282,0.562"   />
+                    <ToggleSwitch  x:Name="ToggleShop"  Grid.Row="4" Header="Fovorite"  OffContent="NO" OnContent="Yes" Margin="33,0,0,0" VerticalAlignment="Bottom" Height="60" RenderTransformOrigin="0.617,0.533" Grid.ColumnSpan="2"/>
+                    <Button  Grid.Row="5" Content="Add" Margin="150,0,0,0" Background="#91C1E7" ClickMode="Press" Click="AddShopButton_Click" />
+                    <TextBlock Grid.Row="5" TextWrapping="Wrap" x:Name="AddShopRemar" FontSize="18" Foreground="Red"  Margin="0,0,63,0"/>
+                    <Button   Content="Choose Image" Grid.Column="1" Margin="39,0,0,0" Background="#91C1E7" ClickMode="Press" Click="ChooseShopImg_Click" />
+                    <StackPanel  Grid.Row="1" Grid.Column="1" Margin="0,10,0,0" Grid.RowSpan="4" >
+                        <Image x:Name="ShopImage" Height="190" Width="190"   Source="Assets/Square150x150Logo.png" RenderTransformOrigin="-0.093,0.492" Margin="0,-5,10,0" />
+                    </StackPanel>
+                </Grid>
+                <Grid x:Name="GridChangProImg">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Button   Content="Choose Image" Margin="35,50,0,0" Background="#91C1E7" ClickMode="Press" Click="ChooseProImg_Click" />
+                    <Button   Content="Change Image" Grid.Column="1" Grid.Row="1" Margin="40,0,0,0" Background="#91C1E7" ClickMode="Press" Click="ChangeProImg_Click" />
+                    <StackPanel  Grid.Row="1" Margin="0,10,0,0" >
+                        <Image x:Name="ProImage1" Height="190" Width="190"  Source="Assets/Square150x150Logo.png" RenderTransformOrigin="-0.093,0.492" Margin="0,-5,10,0" />
+                    </StackPanel>
+                    <TextBlock Grid.Row="2" TextWrapping="Wrap" Margin="5,0,0,0" x:Name="ChangeProImgRemar"  Foreground="Red"/>
+                </Grid>
+            </StackPanel>
+        </ContentDialog>
+        <ContentDialog x:Name="Dialog2"
+                       
+                        Background="#F2F2F2"
+                       RequestedTheme="Light"
+                        VerticalAlignment="Top"
+                        
+                        PrimaryButtonText="OK"
+                        IsPrimaryButtonEnabled="{Binding IsChecked, ElementName=checkBoxAgree, Mode=OneWay}"
+                        SecondaryButtonText="Cancel" Height="561" Width="809"  >
+            <StackPanel x:Name="panel2" Orientation="Vertical">
+
+                <Grid x:Name="GridRenamShop">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock TextWrapping="Wrap" Margin="0,10,0,0" Text=" New Shop Name" FontSize="16" />
+                    <TextBox Grid.Row="1" x:Name="NewNomShop" TextChanging="NewNomShop_TextChanging"  Margin="1,0,0,0" />
+                    <Button Grid.Column="1" Grid.Row="1" Content="Rename" Margin="50,0,0,0" Background="#91C1E7" ClickMode="Press" Click="RenameShopButton_Click" />
+                    <TextBlock Grid.Row="2" TextWrapping="Wrap" x:Name="RenamShopRemar"  Foreground="Red"/>
+                </Grid>
+                <Grid x:Name="GridChangShopImg">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Button   Content="Choose Image" Margin="40,60,0,0" Background="#91C1E7" ClickMode="Press" Click="ChooseShopImg1_Click" />
+                    <Button   Content="Change Image" Grid.Column="1" Grid.Row="1" Margin="40,0,0,0" Background="#91C1E7" ClickMode="Press" Click="ChangeShopImg_Click" />
+                    <StackPanel  Grid.Row="1" Margin="0,10,0,0" >
+                        <Image x:Name="ShopImage1" Height="190" Width="190"   Source="Assets/Square150x150Logo.png" RenderTransformOrigin="-0.093,0.492" Margin="0,-5,10,0" />
+                    </StackPanel>
+                    <TextBlock Grid.Row="2" TextWrapping="Wrap" Margin="5,0,0,0" x:Name="ChangeShopImgRemar"  Foreground="Red"/>
+                </Grid>
+                <Grid x:Name="GridChangePrice" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="83*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition  />
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock TextWrapping="Wrap" Grid.Column="1" Margin="20,0,0,0" Text="New Price" FontSize="16" />
+                    <TextBlock TextWrapping="Wrap"  Margin="0,0,0,0" Text="Product" FontSize="16" />
+                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="Prix1" TextChanging="Prix1_TextChanging"  Margin="20,0,151,0" Grid.ColumnSpan="2" />
+                    <ComboBox x:Name="ComboPro"  Width="133" Margin="0,21,0,0" SelectionChanged="ComboPro_SelectionChanged"  Loaded="ComboPro_Loaded" HorizontalAlignment="Stretch" Grid.RowSpan="2"/>
+                    <Button Grid.Column="2" Grid.Row="1" Content="Change Price" Margin="120,0,0,0" Background="#91C1E7" ClickMode="Press" Click="ChangePrice_Click" Width="146" />
+                    <TextBlock Grid.Row="2" TextWrapping="Wrap" x:Name="ChangePriceRemar"  Foreground="Red"/>
+                </Grid>
+                <Grid x:Name="GridAddProToShop" Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="83*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock TextWrapping="Wrap"   Text="Product" FontSize="16" Grid.RowSpan="2" />
+                    <TextBox x:Name="PrixPro"  Margin="0,21,144,1" TextChanging="PrixPro_TextChanging"  Grid.ColumnSpan="2" Grid.RowSpan="2" Grid.Column="1" />
+                    <TextBlock TextWrapping="Wrap" Grid.Column="1" Margin="0,0,0,0" Text="Price" FontSize="16" />
+                    <ComboBox x:Name="ComboAddPro"  Width="133" Margin="0,21,34,0" SelectionChanged="ComboAddPro_SelectionChanged"  Loaded="ComboAddPro_Loaded" HorizontalAlignment="Stretch" Grid.RowSpan="2"/>
+                    <Button Grid.Column="2" Content="Add Product" Margin="157,0,0,0" Background="#91C1E7" ClickMode="Press" Click="AddProduct_Click" Width="119" Grid.Row="1" />
+                    <TextBlock Grid.Row="2" TextWrapping="Wrap" x:Name="AddProToShopRemar"  Foreground="Red"/>
+                </Grid>
+            </StackPanel>
+        </ContentDialog>
+    </Grid>
+</Page>
